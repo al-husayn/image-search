@@ -2,9 +2,11 @@ import { Search } from "./components";
 
 function App() {
   return (
-    <div className="">
-      <Search />
-    </div>
+    <>
+      <div className="">
+        <Search />
+      </div>
+    </>
   );
 }
 
