@@ -2,7 +2,6 @@ import React from 'react';
 import {  Image, UnsplashResponse } from '../types/Types'
 
 const ImageList:React.FC <{ data: UnsplashResponse }>  = ({ data }) => {
-    console.log("IMAGE", data);
     
   return (
     <div className="flex flex-wrap justify-center align-center h-96">
