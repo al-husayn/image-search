@@ -1,24 +1,11 @@
 import React, { useState, useRef } from "react";
 import { useFetch } from "../hook/useFetch";
-import { useQueryClient } from "@tanstack/react-query";
 import { ErrorMessage, LoadingMessage, ImageList } from ".";
 const API_KEY = import.meta.env.VITE_API_KEY;
 
-export interface Image {
-  id: string;
-  urls: {
-    full: string;
-    regular: string;
-    small: string;
-    thumb: string;
-    raw: string;
-    small_s3: string;
-  };
-}
 
 const Search: React.FC = () => {
   const [searchData, setSearchData] = useState<string>("");
-  const queryClient = useQueryClient();
   const searchInput = useRef<HTMLInputElement | null>(null);
 
   const predefinedSearchTerms = ["Nature", "Birds", "Women", "Laptops"];
@@ -27,12 +14,15 @@ const Search: React.FC = () => {
     event.preventDefault();
     const searchTerm = searchInput.current?.value;
     if (searchTerm) {
-      queryClient.invalidateQueries(["imageData", searchTerm]);
       setSearchData(searchTerm);
     }
   };
 
   const { data, isLoading, isError } = useFetch(searchData, 20, API_KEY);
+  
+
+  console.log("daaaaaaaaaaa", data?.results);
+  
 
   const handleQuickSearch = (term: string) => {
     if (searchInput.current) {
@@ -44,9 +34,9 @@ const Search: React.FC = () => {
   };
 
   return (
-    <div>
-      <div className="flex justify-center items-center h-screen w-full">
-        <div className="w-[50%]">
+    <div className="flex flex-col justify-center items-center h-screen w-full">
+      <div className="w-1/2 justify-center items-center">
+        <>
           <div className="m-10">
             <h1 className="text-black font-semibold text-center text-3xl">
               Image Search
@@ -57,7 +47,7 @@ const Search: React.FC = () => {
               type="text"
               placeholder="Search..."
               ref={searchInput}
-              className="p-4 rounded-l-md min-w-[70%] border border-N300 focus:outline-none font-P300"
+              className="p-4 rounded-l-md min-w-70% border border-N300 focus:outline-none font-P300"
             />
             <button
               type="submit"
@@ -75,17 +65,17 @@ const Search: React.FC = () => {
               ))}
             </div>
           </form>
-        </div>
+        </>
       </div>
-        <div>
-          {isLoading ? (
-            <LoadingMessage />
-          ) : isError ? (
-            <ErrorMessage />
-          ) : (
-            <ImageList data={data} />
-          )}
-        </div>
+      <div className="mt-10">
+        {isLoading ? (
+          <LoadingMessage />
+        ) : isError ? (
+          <ErrorMessage />
+        ) : (
+          <ImageList data={data} />
+        )}
+      </div>
     </div>
   );
 };
