@@ -11,10 +11,11 @@ export const fetchImageData = async (url: string) => {
 
 export const useFetch = (
   searchTerm: unknown,
-  imagesPerPage: unknown,
+  page: unknown,
   apiKey: unknown
 ) => {
-  const apiUrl = `${API_URL}?query=${searchTerm}&page=1&per_page=${imagesPerPage}&client_id=${apiKey}`;
+  const imagesPerPage = 20;
+  const apiUrl = `${API_URL}?query=${searchTerm}&page=${page}&per_page=${imagesPerPage}&client_id=${apiKey}`;
 
   return useQuery(["imageData", apiUrl], () => fetchImageData(apiUrl), {
     enabled: true,

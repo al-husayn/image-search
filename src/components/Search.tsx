@@ -1,4 +1,4 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import { useFetch } from "../hook/useFetch";
 import { ErrorMessage, LoadingMessage, ImageList } from ".";
 const API_KEY = import.meta.env.VITE_API_KEY;
@@ -7,18 +7,28 @@ const API_KEY = import.meta.env.VITE_API_KEY;
 const Search: React.FC = () => {
   const [searchData, setSearchData] = useState<string>("");
   const searchInput = useRef<HTMLInputElement | null>(null);
+  const [page, setPage] = useState(1)
+  const [totalPages, setTotalPages] = useState(0)
+  const { data, isLoading, isError } = useFetch(searchData, page, API_KEY);
 
   const predefinedSearchTerms = ["Nature", "Birds", "Women", "Laptops"];
+
+  useEffect(() => {
+   if(data){
+    setTotalPages(data?.total_pages)
+   }
+  }, [data])
+  
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const searchTerm = searchInput.current?.value;
     if (searchTerm) {
       setSearchData(searchTerm);
+      setPage(1)
     }
   };
 
-  const { data, isLoading, isError } = useFetch(searchData, 20, API_KEY);
   
 
   console.log("daaaaaaaaaaa", data?.results);
@@ -32,6 +42,11 @@ const Search: React.FC = () => {
       );
     }
   };
+  const handlePage =(newPage:number)=>{
+    if(newPage >= 1 && newPage <= totalPages){
+      setPage(newPage)
+    }
+  }
 
   return (
     <div className="flex flex-col justify-center items-center h-screen w-full">
@@ -73,7 +88,7 @@ const Search: React.FC = () => {
         ) : isError ? (
           <ErrorMessage />
         ) : (
-          <ImageList data={data} />
+          <ImageList data={data} onPageChange={handlePage} currentPage={page} totalPages={totalPages}/>
         )}
       </div>
     </div>
