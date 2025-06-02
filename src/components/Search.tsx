@@ -31,7 +31,6 @@ const Search: React.FC = () => {
 
   
 
-  console.log("daaaaaaaaaaa", data?.results);
   
 
   const handleQuickSearch = (term: string) => {

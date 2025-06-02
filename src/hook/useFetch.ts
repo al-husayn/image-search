@@ -4,7 +4,7 @@ const API_URL = "https://api.unsplash.com/search/photos";
 
 export const fetchImageData = async (url: string) => {
   const response = await axios.get(url);
-  console.log('AAAAAAAAA', response?.data);
+ 
   
   return response.data;
 };
